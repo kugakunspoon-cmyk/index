@@ -815,7 +815,7 @@ function render() {
   else if (currentType === "新着")  list = list.filter(s => s.tags.includes("新着"));
   else if (currentType === "未完成") list = list.filter(s => s.tags.includes("未完成"));
 
-if (currentType === "all") {
+if (currentType === "all" || currentType === "新着") {
     const seen = new Map();
     list.forEach(s => {
       const key = s.title + "|||" + s.artist;
@@ -879,7 +879,7 @@ if (currentType === "all") {
     const rows = groups[row].map(s => {
       const newTag  = s.tags.includes("新着")   ? '<span class="tag-new">NEW</span>'    : "";
       const both    = s.tags.includes("機材歌") && s.tags.includes("生歌");
-      const liveTag = currentType === "all"
+      const liveTag = (currentType === "all" || currentType === "新着")
         ? (both ? '<span class="tag-live">機材歌・生歌</span>' : s.tags.includes("機材歌") ? '<span class="tag-live">機材歌</span>' : '<span class="tag-live">生歌</span>')
         : currentType === "機材歌" && both ? '<span class="tag-live">生歌も可</span>'
         : currentType === "生歌"   && both ? '<span class="tag-live">機材歌も可</span>'
