@@ -783,13 +783,16 @@ function getRow(song) {
   return "ア行";
 }
 
-// 並び替えキー
-//  ・yomi が2文字以上 → フル読みをそのままキーにする
-//  ・yomi が1文字 or なし → (頭文字の読み) + タイトル
 function sortKey(song) {
   const y = song.yomi || "";
-  const base = y.length > 1 ? y : (y || song.title.charAt(0)) + song.title;
-  return toKatakana(base.normalize("NFKC")).toUpperCase();
+  let base;
+  if (y.length > 1)      base = y;                          // フル読み
+  else if (y.length === 1) base = y + song.title.slice(1);  // 頭文字の読み＋2文字目以降
+  else                   base = song.title;                 // 読みなし：タイトルそのまま
+  return toKatakana(base.normalize("NFKC"))
+    .replace(/ヴ/g, "ウ")
+    .replace(/[\s・\-!！?？.。,、*＊'’]/g, "")
+    .toUpperCase();
 }
 
 // ─── STATE ───────────────────────────────────────────────────────────
